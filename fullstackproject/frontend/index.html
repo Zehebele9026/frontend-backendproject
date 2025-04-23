@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Sayfası</title>
+  <style>
+    #forgotPassword {
+      display: none;
+      color: blue;
+      margin-top: 10px;
+    }
+    #registerBtn {
+      margin-top: 10px;
+      color: blue;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Giriş Yap</h2>
+    <form id="loginForm">
+      <label>Kullanıcı Adı:</label>
+      <input type="text" name="username" required><br>
+      <label>Şifre:</label>
+      <input type="password" name="password" required><br>
+      <button type="submit">Giriş Yap</button>
+    </form>
+
+    <p id="result"></p>
+
+    <button id="registerBtn">Hesabınız yok mu? Kayıt olun</button>
+    <p id="forgotPassword">Şifrenizi mi unuttunuz? <a href="#">Tıklayın</a></p>
+  </div>
+
+  <script>
+    let errorCount = 0;
+
+    document.getElementById("loginForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(event.target);
+      const data = new URLSearchParams();
+      for (const pair of formData) {
+        data.append(pair[0], pair[1]);
+      }
+
+      try {
+        const response = await fetch("http://localhost:8000/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: data
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          localStorage.setItem("token", result.access_token);
+          console.log("LOGIN BİLGİSİ: Kullanıcı giriş yaptı");
+          window.location.href = "dashboard.html";
+        } else {
+          errorCount++;
+          document.getElementById("result").innerText = "Hata: " + result.detail;
+          if (errorCount >= 3) {
+            document.getElementById("forgotPassword").style.display = "block";
+          }
+        }
+      } catch (err) {
+        document.getElementById("result").innerText = "Bağlantı hatası.";
+      }
+    });
+
+    document.getElementById("registerBtn").addEventListener("click", function () {
+      window.location.href = "register.html";
+    });
+  </script>
+</body>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 300px;
+    text-align: center;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: #5c6bc0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  button:hover {
+    background-color: #3949ab;
+  }
+
+  #forgotPassword,
+  #registerBtn {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  #forgotPassword a,
+  #registerBtn {
+    color: #3949ab;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+</style>
+
+</html>

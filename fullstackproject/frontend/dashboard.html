@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+</head>
+<body>
+  <div class="container">
+    <h2>Hoş Geldiniz!</h2>
+    <p>Başarıyla giriş yaptınız.</p>
+    <button id="logoutBtn">Çıkış Yap</button>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "index.html";
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", function() {
+      localStorage.removeItem("token");
+      console.log("LOGOUT BİLGİSİ: Kullanıcı çıkış yaptı");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 300px;
+    text-align: center;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: #5c6bc0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  button:hover {
+    background-color: #3949ab;
+  }
+
+  #forgotPassword,
+  #registerBtn {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  #forgotPassword a,
+  #registerBtn {
+    color: #3949ab;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+</style>
+
+</html>

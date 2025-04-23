@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Kayıt Ol</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Kayıt Sayfası</h2>
+        <form id="registerForm">
+          <label>Kullanıcı Adı:</label>
+          <input type="text" name="username" required><br>
+          <label>Şifre:</label>
+          <input type="password" name="password" required><br>
+          <button type="submit">Kayıt Ol</button>
+        </form>
+        <p id="result"></p>
+      </div>
+
+  <p id="result"></p>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+  
+      const formData = new FormData(event.target);
+      const jsonData = {
+        username: formData.get("username"),
+        password: formData.get("password")
+      };
+  
+      try {
+        const response = await fetch("http://localhost:8000/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(jsonData)
+        });
+  
+        const result = await response.json();
+        if (response.ok) {
+          document.getElementById("result").innerText = "Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...";
+          console.log("LOGIN BİLGİSİ:YENİ Bİ HESAP KAYDEDİLDİ");
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 2000);
+        } else {
+          document.getElementById("result").innerText = "Hata: " + result.detail;
+        }
+      } catch (error) {
+        document.getElementById("result").innerText = "Bağlantı hatası.";
+      }
+    });
+  </script>
+</body>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+  
+    .container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 300px;
+      text-align: center;
+    }
+  
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+  
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  
+    button {
+      padding: 10px 20px;
+      background-color: #5c6bc0;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  
+    button:hover {
+      background-color: #3949ab;
+    }
+  
+    #forgotPassword,
+    #registerBtn {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  
+    #forgotPassword a,
+    #registerBtn {
+      color: #3949ab;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+  
+</html>
